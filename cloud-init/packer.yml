@@ -1,0 +1,14 @@
+#cloud-config
+hostname: packer
+
+chpasswd:
+  expire: False
+
+disable_root: false
+ssh_authorized_keys:
+  - $SSH_KEY
+
+locale: en_US.UTF-8
+locale_configfile: /etc/default/locale
+
+

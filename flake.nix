@@ -1,11 +1,30 @@
 {
-  description = "A very basic flake";
-
-  outputs = { self, nixpkgs }: {
-
-    packages.x86_64-linux.hello = nixpkgs.legacyPackages.x86_64-linux.hello;
-
-    defaultPackage.x86_64-linux = self.packages.x86_64-linux.hello;
-
+  description = "example-terraform-k8s-kvm";
+  inputs = {
+    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable"; 
+    flake-utils.url  = "github:numtide/flake-utils";
   };
+  outputs = { self, nixpkgs, flake-utils }: flake-utils.lib.eachDefaultSystem (system:
+    let
+      pkgs = import nixpkgs { inherit system; };
+
+      cloud-init-build-img = pkgs.writeShellScriptBin "cloud-init-build-img" ''
+        export SSH_KEY=$(cat ~/.ssh/id_rsa.pub) 
+        mkdir -p $PWD/tmp
+        rm -rf ./tmp/cloud-init.img
+        cloud-localds ./tmp/cloud-init.img ./cloud-init/packer.yml 
+      '';
+
+
+    in with pkgs; {
+      devShell = mkShell {
+        buildInputs = [
+          cloud-utils
+          cloud-init-build-img
+        ];
+        # shellHook = ''
+        # '';
+      };
+    }
+  );
 }
