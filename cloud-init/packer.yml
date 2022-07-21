@@ -6,7 +6,7 @@ chpasswd:
 
 disable_root: false
 ssh_authorized_keys:
-  - $SSH_KEY
+  - SSH_KEY
 
 locale: en_US.UTF-8
 locale_configfile: /etc/default/locale
