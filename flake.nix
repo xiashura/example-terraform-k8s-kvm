@@ -22,6 +22,7 @@
         buildInputs = [
           cloud-utils
           cloud-init-build-img
+          packer
         ];
         # shellHook = ''
         # '';
