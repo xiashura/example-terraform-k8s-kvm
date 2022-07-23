@@ -6,10 +6,6 @@ packer {
       version = ">= 1.0.4"
       source  = "github.com/hashicorp/qemu"
     }
-    ansible = {
-      version = ">= 1.0.2"
-      source  = "github.com/hashicorp/ansible"
-    }
   }
 }
 
@@ -87,15 +83,9 @@ build {
   sources = ["source.qemu.master-node"]
 
   provisioner "shell" {
-    inline = [
-      "echo test"
-    ]
-  }
-
-  provisioner "shell" {
     execute_command = "bash -x {{.Path}}"
     scripts = [
-      "./cloud-init/scripts/test.sh"
+      "./cloud-init/scripts/install-k8s.sh"
     ]
   }
 }
