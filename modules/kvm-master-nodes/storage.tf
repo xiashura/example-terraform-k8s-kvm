@@ -3,11 +3,17 @@ data "template_file" "user_data" {
   vars = {
     hostname = var.name
     ssh-keys = var.ssh_key
+    fqdn     = "${var.name}.${var.dns_domain}"
   }
 }
 
 data "template_file" "network_config" {
   template = file("${path.module}/templates/network-config.cfg")
+  vars = {
+    ip_address = var.ip_address
+    gw_address = var.gw_address
+    domain     = var.dns_domain
+  }
 }
 
 resource "libvirt_cloudinit_disk" "commoninit" {

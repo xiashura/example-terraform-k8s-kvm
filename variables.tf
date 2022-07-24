@@ -6,14 +6,18 @@ variable "image_base_k8s" {
 }
 
 locals {
-  hosts = concat(var.hosts,
-    module.config.map_configs.loadbalancer-node,
-  )
 
   hosts-master-nodes = concat(var.hosts-master-nodes,
     module.config.map_configs.master-node-1,
-    module.config.map_configs.master-node-2
+    # module.config.map_configs.master-node-2
   )
+
+  hosts_nodes = concat(
+    var.hosts_nodes,
+
+    module.config.map_configs.master-node-1
+  )
+
 
 }
 
@@ -27,10 +31,32 @@ variable "sshkey-nixos-thinkpad" {
   default = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDKEcOfY3EOwQTyLSGZELMCh9IbQroPKl6GnyfHLxbLLoyiKhAN96yoIQNcuGsdbO8uj1Hfl+vUvl7/5JRPavpmOCOX1XfLBdcwhEsVKZQEsf0QXMF5Y/yUQLr25sNqGIH9xVzyHT/pnrRBt5ULF4MvOFtf3iZUvHgiB/bphYKwjxxOXolDRojPMC9gaNktxngltHz0OJyIs/3sWjscmRoTnkU/mZKJCLK9+DrPSRBEe6iE+zvS1tYjJ7w79kFdos0nFDdBSXe8RCEL3mNBn4RTpinPALQcFzvTd7NuIAKz7GiwO61c+7u0iRHgYGnM+odyuGabgzmbgv4zLGyav9RXzg7OiaNXKqxvmUBkpYfqjq9awrNfhtj6clNLJQU1LLLzF9J/B4X6xIw36FoMrDeK/3lJ78SaYtcUV9O16pnLJLrToJL2BflO9eclhY8eB6SGNeYUQAmggvuEk9+Qyb0h9kjmS57gFptpM6C0w0gmhlFwxjbQEyRSrAs9qslh6vc= xiashura@arch"
 }
 
+variable "hosts_nodes" {
+  type = list(object({
+    hostname = string
+    ip       = string
+  }))
+  default = []
+}
+
+variable "gw_address" {
+  type    = string
+  default = "10.223.1.1"
+}
+variable "addresses" {
+  type    = list(string)
+  default = ["10.223.1.0/24"]
+
+}
+variable "dns_domain" {
+  type    = string
+  default = "dns_domain"
+}
 
 variable "hosts-master-nodes" {
   type = list(object({
     name   = string
+    ip     = string
     source = string
     memory = string
     vcpu   = number
@@ -47,7 +73,9 @@ variable "hosts-master-nodes" {
 
 variable "hosts" {
   type = list(object({
-    name   = string
+    name = string
+
+    ip     = string
     source = string
     memory = string
     vcpu   = number

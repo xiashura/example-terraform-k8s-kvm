@@ -1,5 +1,6 @@
 master-node-2:
   - name: "master-node-2"
+    ip: 10.223.1.1
     source: "/home/xi/Projects/devops/example-terraform-k8s-kvm/build/master-node/master-node.qcow2"
     memory: "2048"
     vcpu: 2

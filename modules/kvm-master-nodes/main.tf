@@ -11,7 +11,8 @@ resource "libvirt_domain" "kvm_node" {
   cloudinit = libvirt_cloudinit_disk.commoninit.id
 
   network_interface {
-    network_id = var.libvirt_network.id
+    network_id   = var.libvirt_network.id
+    network_name = var.libvirt_network.name
   }
 
   console {

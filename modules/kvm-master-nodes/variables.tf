@@ -29,5 +29,19 @@ variable "image_base" {
 
 variable "ssh_key" {
   description = "ssh key pub for cloud-init auth "
-
 }
+
+variable "dns_domain" {
+  description = "DNS domain name"
+  default     = "localdomain"
+}
+
+variable "gw_address" {
+  description = "IP address of the gateway"
+  default     = "10.223.1.1"
+}
+
+variable "ip_address" {
+  description = "ip sub mask"
+}
+
