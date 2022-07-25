@@ -23,6 +23,7 @@
           cloud-utils
           cloud-init-build-img
           packer
+          cdrkit
         ];
         # shellHook = ''
         # '';
