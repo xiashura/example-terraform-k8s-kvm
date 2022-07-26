@@ -24,6 +24,7 @@
           cloud-init-build-img
           packer
           cdrkit
+          cfssl
         ];
         # shellHook = ''
         # '';

@@ -1,5 +1,3 @@
-
-
 provider "libvirt" {
   uri   = "qemu:///system"
   alias = "remote"
@@ -17,7 +15,10 @@ module "config" {
 }
 
 
-
+module "init-cert" {
+  source    = "./modules/k8s-init-cert"
+  addresses = join(",", [for s in local.hosts_nodes : format("%s", s.ip)])
+}
 
 
 module "kvm-resources-nodes" {

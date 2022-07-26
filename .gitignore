@@ -5,3 +5,4 @@ build
 terraform.tfstate  
 terraform.tfstate.backup
 .terraform.tfstate.lock.info
+k8s/cert/*
