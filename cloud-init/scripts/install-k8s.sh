@@ -31,6 +31,9 @@ mkdir -p /etc/systemd/system/docker.service.d
 systemctl daemon-reload
 systemctl restart docker
 
+rm /etc/containerd/config.toml
+systemctl restart containerd
+
 curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
 
 cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
@@ -45,6 +48,15 @@ systemctl daemon-reload
 systemctl restart kubelet
 
 kubeadm config images pull
+
+
+export RELEASE_ETCD=$(curl -s https://api.github.com/repos/etcd-io/etcd/releases/latest|grep tag_name | cut -d '"' -f 4)
+wget https://github.com/etcd-io/etcd/releases/download/${RELEASE_ETCD}/etcd-${RELEASE_ETCD}-linux-amd64.tar.gz
+tar xvf etcd-${RELEASE_ETCD}-linux-amd64.tar.gz
+sudo mv ./etcd-${RELEASE_ETCD}-linux-amd64/etcd ./etcd-${RELEASE_ETCD}-linux-amd64/etcdctl /usr/local/bin 
+
+sed -i -e 's/#DNS=/DNS=8.8.8.8/g' /etc/systemd/resolved.conf 
+systemctl restart systemd-resolved
 
 swapoff -a
 apt autoclean

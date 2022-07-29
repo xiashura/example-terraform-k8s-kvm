@@ -1,0 +1,4 @@
+variable "host" {
+  type = string
+
+}

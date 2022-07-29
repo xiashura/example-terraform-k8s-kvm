@@ -9,13 +9,14 @@ locals {
 
   hosts-master-nodes = concat(var.hosts-master-nodes,
     module.config.map_configs.master-node-1,
-    # module.config.map_configs.master-node-2
+    module.config.map_configs.master-node-2
   )
 
   hosts_nodes = concat(
     var.hosts_nodes,
 
-    module.config.map_configs.master-node-1
+    module.config.map_configs.master-node-1,
+    module.config.map_configs.master-node-2
   )
 
 

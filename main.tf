@@ -54,6 +54,8 @@ module "kvm-master-nodes" {
   libvirt_pool    = module.kvm-resources-nodes.libvirt_pool
   libvirt_network = module.kvm-resources-nodes.libvirt_network
 
+  hosts-etcd = join(",", [for s in local.hosts-master-nodes : format("%s=https://%s:2380", s.ip, s.ip)])
+
   providers = {
     libvirt = libvirt.remote
   }
