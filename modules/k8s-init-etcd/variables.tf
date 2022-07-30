@@ -1,4 +1,0 @@
-variable "host" {
-  type = string
-
-}

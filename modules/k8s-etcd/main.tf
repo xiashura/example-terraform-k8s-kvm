@@ -1,20 +1,19 @@
 
 
-data "template_file" "etcd_service_file" {
-  template = file("${path.module}/templates/etcd.service")
-  vars = {
+resource "local_file" "etcd_service" {
+  content = templatefile("${path.module}/template/etcd.service", {
     host  = var.ip_address
     hosts = var.hosts-etcd
-  }
+  })
+  filename = "${path.root}/tmp/${var.name}-etcd.service"
 }
+
 
 resource "null_resource" "etcd" {
 
-
   depends_on = [
-    libvirt_domain.kvm_node,
+    local_file.etcd_service,
   ]
-
 
   connection {
     type        = "ssh"
@@ -23,17 +22,10 @@ resource "null_resource" "etcd" {
     host        = var.ip_address
   }
 
-
-  # provisioner "remote-exec" {
-  #   inline = [
-  #     "wget https://github.com/etcd-io/etcd/releases/download/v3.4.13/etcd-v3.4.13-linux-amd64.tar.gz -O /root/etcd-amd64.tar.gz",
-  #     "tar xvzf /root/etcd-amd64.tar.gz -C /root/",
-  #     "mv /root/etcd-v3.4.13-linux-amd64/etcd /usr/local/bin/etcd",
-  #     "mv /root/etcd-v3.4.13-linux-amd64/etcdctl /usr/local/bin/etcdctl",
-
-  #   ]
-  # }
-
+  provisioner "file" {
+    source      = "${path.root}/tmp/${var.name}-etcd.service"
+    destination = "/etc/systemd/system/etcd.service"
+  }
 
   provisioner "remote-exec" {
     inline = [
@@ -46,12 +38,10 @@ resource "null_resource" "etcd" {
     destination = "/etc/etcd/ca.pem"
   }
 
-
   provisioner "file" {
     source      = "${path.root}/k8s/cert/kubernetes.pem"
     destination = "/etc/etcd/kubernetes.pem"
   }
-
 
   provisioner "file" {
     source      = "${path.root}/k8s/cert/kubernetes-key.pem"
@@ -60,17 +50,10 @@ resource "null_resource" "etcd" {
 
   provisioner "remote-exec" {
     inline = [
-      "cat << EOF > /etc/systemd/system/etcd.service\n${data.template_file.etcd_service_file.rendered}\nEOF"
-    ]
-  }
-
-  provisioner "remote-exec" {
-    inline = [
       "systemctl daemon-reload",
       "systemctl enable etcd",
-      "systemctl start etcd"
+      "systemctl start etcd",
     ]
   }
-
 
 }
