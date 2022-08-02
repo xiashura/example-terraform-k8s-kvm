@@ -23,9 +23,7 @@ nodeRegistration:
 ---
 apiServer:
   certSANs:
-  %{~ for host in split(",",hosts)  ~}
-    - ${host}
-  %{~ endfor ~}
+    - ${haproxy-host}
   extraArgs:
     apiserver-count: "${count}"
   timeoutForControlPlane: 4m0s

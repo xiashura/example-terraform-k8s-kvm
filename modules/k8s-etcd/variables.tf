@@ -14,3 +14,9 @@ variable "hosts-etcd" {
 variable "id_vm" {
 
 }
+
+variable "id_dependsi" {
+  default = "example"
+}
+
+

@@ -1,9 +1,7 @@
 import:
   - ./loadbalancer-node/loadbalancer-node
-  - ./master-nodes/master-node-1  
+  - ./master-nodes/master-node-1
   - ./master-nodes/master-node-2
-  # - ./worker-nodes/worker-node-1 
-  # - ./worker-nodes/worker-node-2
-  # - ./worker-nodes/worker-node-3
-
-
+  - ./worker-nodes/worker-node-1
+  - ./worker-nodes/worker-node-2
+  - ./worker-nodes/worker-node-3

@@ -25,6 +25,7 @@
           packer
           cdrkit
           cfssl
+          openssl
         ];
         # shellHook = ''
         # '';

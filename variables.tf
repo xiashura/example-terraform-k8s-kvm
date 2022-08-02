@@ -5,11 +5,24 @@ variable "image_base_k8s" {
 
 }
 
+variable "image_base_loadbalancer" {
+  default = "build/loadbalancer-node/loadbalancer-node.qcow2"
+}
+
 locals {
 
-  hosts-master-nodes = concat(var.hosts-master-nodes,
+  hosts-haproxy-node = module.config.map_configs.loadbalancer-node
+
+  hosts-master-nodes = concat(
+    var.hosts-master-nodes,
     module.config.map_configs.master-node-1,
     module.config.map_configs.master-node-2
+  )
+
+  hosts-worker-nodes = concat(
+    var.hosts-worker-nodes,
+    module.config.map_configs.worker-node-1,
+    module.config.map_configs.worker-node-2,
   )
 
   hosts_nodes = concat(
@@ -72,10 +85,47 @@ variable "hosts-master-nodes" {
   default = []
 }
 
+variable "hosts-haproxy-node" {
+  type = list(object({
+    name   = string
+    ip     = string
+    source = string
+    memory = string
+    vcpu   = number
+    size   = number
+    configuration = object({
+      name     = string
+      passwd   = string
+      ssh-keys = list(string)
+    })
+  }))
+  default = []
+}
+
+variable "hosts-worker-nodes" {
+  type = list(object({
+    name             = string
+    ip               = string
+    master-node-ip   = string
+    master-node-name = string
+    source           = string
+    memory           = string
+    vcpu             = number
+    size             = number
+    configuration = object({
+      name     = string
+      passwd   = string
+      ssh-keys = list(string)
+    })
+  }))
+  default = []
+}
+
+
+
 variable "hosts" {
   type = list(object({
-    name = string
-
+    name   = string
     ip     = string
     source = string
     memory = string

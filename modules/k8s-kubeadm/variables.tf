@@ -26,7 +26,24 @@ variable "hosts-kubeadm-count-api" {
 
 }
 
+variable "hosts-master-nodes-domain" {
 
-variable "id_k8s_etcd" {
+}
+
+variable "id_k8s_etcd_dependsi" {
   description = "dependsi id for apply kubeadm"
+}
+
+variable "id_haproxy_dependsi" {
+
+}
+
+
+variable "haproxy-node-host" {
+
+}
+
+
+variable "id_dependsi" {
+  default = "example"
 }

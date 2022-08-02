@@ -11,6 +11,10 @@ resource "local_file" "etcd_service" {
 
 resource "null_resource" "etcd" {
 
+  triggers = {
+    id_dependsi = var.id_dependsi
+  }
+
   depends_on = [
     local_file.etcd_service,
   ]
