@@ -1,16 +1,26 @@
+# example-terraform-k8s-kvm
+this simple infrastructure as code governed 
+by terraform setup cluster kubernetes HA on kvm
 
+# run 
 
-  # uri   = "qemu+ssh://xi@109.194.163.242/system?keyfile=/home/xi/.ssh/id_rsa&sshauth=privkey&no_verify=1&no_tty=1"
-https://tansanrao.com/kubernetes-ha-cluster-with-kubeadm/
+first need you install dependency packages required
 
-https://foxutech.com/setup-a-multi-master-kubernetes-cluster-with-kubeadm/
+```bash
+nix develop 
+```
 
-1) scripts template pki for generate node cert and initializations
-2) module upload cert
-3) template etcd configs
-4) module loadbalancer
+then build cloud image for easy start vm 
+```bash
+packer init ./packer/master-node.pkr.hcl
+packer build ./packer/master-node.pkr.hcl
+packer init ./packer/ loadbalancer-node.pkr.hcl
+packer build ./packer/loadbalancer-node.pkr.hcl
+```
 
-kubeadm join --token <token> --discovery-token-ca-cert-hash <sha256>
-
-TOKEN=$(sshpass -p $PASSWORD ssh  -o StrictHostKeyChecking=no root@$MASTER_IP sudo kubeadm token list | tail -1 | cut -f 1 -d " ")
-HASH=$(sshpass -p $PASSWORD ssh  -o StrictHostKeyChecking=no  root@$MASTER_IP  openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //' ) 
+after need configurations variables.tf and
+you can deploy k8s HA on kvm 
+```
+terraform init && terraform apply
+```
+# info
