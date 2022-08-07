@@ -9,9 +9,9 @@ first need you install dependency packages required
 ```bash
 nix develop 
 ```
-
 then build cloud image for easy start vm 
 ```bash
+cloud-init-build-img
 packer init ./packer/master-node.pkr.hcl
 packer build ./packer/master-node.pkr.hcl
 packer init ./packer/ loadbalancer-node.pkr.hcl
