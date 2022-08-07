@@ -24,3 +24,4 @@ you can deploy k8s HA on kvm
 terraform init && terraform apply
 ```
 # info
+<img src=./docs/example.png>
