@@ -26,6 +26,9 @@
           cdrkit
           cfssl
           openssl
+          terraform
+          terraform-providers.libvirt
+          
         ];
         # shellHook = ''
         # '';
