@@ -1,12 +1,11 @@
-loadbalancer-node:
-  name: "loadbalancer-node"
-  ip: 10.223.1.10
-  source: "/home/xi/Projects/devops/example-terraform-k8s-kvm/build/master-node/master-node.qcow2"
-  memory: "512"
-  vcpu: 1
-  disk_size: 10
-  configuration:
-    name: simple
-    passwd: 191351wq
-    ssh-keys:
-      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQClAa1q27xKavfjBrWxpIegUHVaaUg9ud/8ugw4FL6z3dqHnyaeRk1S/G4tZ/pvxo+KPkNHwd1GGQ/YJKg5ssof1t0Ax+y3+d4oGHCsVqyLjnKGhUvLKuBW2yclH+IUTYfwuv8TchvC6zOiN+IynU9/3Vlk/RqxP7cULykggqtBk5FKhsIwz32hzvBoZD/Ne/xeXZxDc/JCjGNde1wiRKEpZ+C0xs4uqLlh54lOdqY5QlVqO+Ou2vxBhoNGG9D3SARxcTLkOPu1NYtUblcJANXsWYgsAsak3FTXreLzRct8rovWMjDx86xa3RVdbLmODVdLOb2++k+qWefnAoNFin+eYCjMuviwF/3FG31KcYhe0wgKDtxi6Nm8qfoGQax9FsKL1lqi3EaEJM6W0XQCXOvDBOj5blv0cIVEZki4TJdL7BX3tQcOwXstA4ogENirnfpoRU5FcHiKw0Gre42yqT2KlOnZibE6IsOZwFz4t3qffaMTNFSnWcSixKnKIwIfjQs= xi@nixos"
+name: "loadbalancer-node"
+ip: 10.223.1.10
+source: "/home/xi/Projects/devops/example-terraform-k8s-kvm/build/master-node/master-node.qcow2"
+memory: "512"
+vcpu: 1
+disk_size: 10
+configuration:
+  name: simple
+  passwd: 191351wq
+  ssh-keys:
+    - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQClAa1q27xKavfjBrWxpIegUHVaaUg9ud/8ugw4FL6z3dqHnyaeRk1S/G4tZ/pvxo+KPkNHwd1GGQ/YJKg5ssof1t0Ax+y3+d4oGHCsVqyLjnKGhUvLKuBW2yclH+IUTYfwuv8TchvC6zOiN+IynU9/3Vlk/RqxP7cULykggqtBk5FKhsIwz32hzvBoZD/Ne/xeXZxDc/JCjGNde1wiRKEpZ+C0xs4uqLlh54lOdqY5QlVqO+Ou2vxBhoNGG9D3SARxcTLkOPu1NYtUblcJANXsWYgsAsak3FTXreLzRct8rovWMjDx86xa3RVdbLmODVdLOb2++k+qWefnAoNFin+eYCjMuviwF/3FG31KcYhe0wgKDtxi6Nm8qfoGQax9FsKL1lqi3EaEJM6W0XQCXOvDBOj5blv0cIVEZki4TJdL7BX3tQcOwXstA4ogENirnfpoRU5FcHiKw0Gre42yqT2KlOnZibE6IsOZwFz4t3qffaMTNFSnWcSixKnKIwIfjQs= xi@nixos"

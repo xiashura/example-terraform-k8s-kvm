@@ -3,18 +3,6 @@ provider "libvirt" {
   alias = "remote"
 }
 
-module "config" {
-
-  source = "cloudposse/config/yaml"
-
-  map_config_local_base_path = "./resources"
-
-  map_config_paths = [
-    "main.yaml",
-  ]
-}
-
-
 module "init-cert" {
   source    = "./modules/k8s-init-cert"
   addresses = join(",", [for s in local.hosts_nodes : format("%s", s.ip)])
@@ -22,6 +10,8 @@ module "init-cert" {
 
 module "kvm-resources-nodes" {
   source = "./modules/kvm-resources-nodes"
+
+  path = "/tmp/terraform_hosts"
 
   addresses  = var.addresses
   gw_address = var.gw_address
