@@ -1,19 +1,35 @@
-#!/bin/bash -x
+#!/bin/bash -eux
 
-apt-get update && apt-get install -y \
-  apt-transport-https ca-certificates curl software-properties-common
 
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+apt update -y  
+apt install -y apt-transport-https ca-certificates \
+  curl lsb-core dpkg \
+  software-properties-common \
+  gnupg2 
 
-add-apt-repository \
-  "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
-  $(lsb_release -cs) \
-  stable"
+curl -fsSL "https://download.docker.com/linux/ubuntu/gpg" | sudo gpg --dearmor --yes -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-apt-get update && apt-get install -y \
-  containerd.io=1.2.10-3 \
-  docker-ce=5:19.03.4~3-0~ubuntu-$(lsb_release -cs) \
-  docker-ce-cli=5:19.03.4~3-0~ubuntu-$(lsb_release -cs)
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" >> /etc/apt/sources.list.d/docker.list 
+
+apt update -y && apt install -y \
+  containerd.io \
+  docker-ce \
+  docker-ce-cli
+
+docker info
+
+containerd config default > /etc/containerd/config.toml 
+sed -i 's/SystemdCgroup \= false/SystemdCgroup \= true/g' /etc/containerd/config.toml
+
+cat > /etc/modules-load.d/containerd.conf <<EOF
+overlay
+br_netfilter
+EOF
+
+modprobe overlay
+modprobe br_netfilter
+
+
 
 cat > /etc/docker/daemon.json <<EOF
 {
@@ -31,33 +47,26 @@ mkdir -p /etc/systemd/system/docker.service.d
 systemctl daemon-reload
 systemctl restart docker
 
-rm /etc/containerd/config.toml
 systemctl restart containerd
 
-curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
+curl -fsSLo /usr/share/keyrings/kubernetes-archive-keyring.gpg https://packages.cloud.google.com/apt/doc/apt-key.gpg
+echo "deb [signed-by=/usr/share/keyrings/kubernetes-archive-keyring.gpg] https://apt.kubernetes.io/ kubernetes-xenial main" >> /etc/apt/sources.list.d/kubernetes.list
 
-cat <<EOF | sudo tee /etc/apt/sources.list.d/kubernetes.list
-deb https://apt.kubernetes.io/ kubernetes-xenial main
+sudo apt update -y 
+sudo apt install -y kubelet kubeadm kubectl
+sudo apt-mark hold kubelet kubeadm kubectl
+
+cat > /etc/sysctl.d/kubernetes.conf <<EOF
+net.bridge.bridge-nf-call-ip6tables=1
+net.bridge.bridge-nf-call-iptables=1
+net.ipv4.ip_forward=1
 EOF
 
-sudo apt-get update
-sudo apt-get install -y kubelet kubeadm kubectl
-sudo apt-mark hold kubelet kubeadm kubectl
 
 systemctl daemon-reload
 systemctl restart kubelet
-
-kubeadm config images pull
-
-
-export RELEASE_ETCD=$(curl -s https://api.github.com/repos/etcd-io/etcd/releases/latest|grep tag_name | cut -d '"' -f 4)
-wget https://github.com/etcd-io/etcd/releases/download/${RELEASE_ETCD}/etcd-${RELEASE_ETCD}-linux-amd64.tar.gz
-tar xvf etcd-${RELEASE_ETCD}-linux-amd64.tar.gz
-sudo mv ./etcd-${RELEASE_ETCD}-linux-amd64/etcd ./etcd-${RELEASE_ETCD}-linux-amd64/etcdctl /usr/local/bin 
 
 sed -i -e 's/#DNS=/DNS=8.8.8.8/g' /etc/systemd/resolved.conf 
 systemctl restart systemd-resolved
 
 swapoff -a
-apt autoclean
-rm -Rf /var/cache/apt/*
