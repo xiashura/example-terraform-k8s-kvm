@@ -6,7 +6,7 @@ resource "null_resource" "k8s-get-credentials-join" {
     command = <<EOF
       TOKEN=$(ssh -o StrictHostKeyChecking=no root@${var.master-node-host} sudo kubeadm token list | tail -1 | cut -f 1 -d " ") 
       HASH=$(ssh -o StrictHostKeyChecking=no root@${var.master-node-host} openssl x509 -pubkey -in /etc/kubernetes/pki/ca.crt | openssl rsa -pubin -outform der 2>/dev/null | openssl dgst -sha256 -hex | sed 's/^.* //' ) 
-      echo "kubeadm join ${var.haproxy-node-host}:6443 --token $TOKEN --discovery-token-ca-cert-hash sha256:$HASH" > ${path.root}/tmp/script-join.sh
+      echo "kubeadm join ${var.haproxy-node-host}:6443 --token $TOKEN --discovery-token-ca-cert-hash sha256:$HASH" > ${path.root}/tmp/script-worker-join.sh
     EOF
   }
 
