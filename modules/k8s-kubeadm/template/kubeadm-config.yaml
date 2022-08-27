@@ -42,11 +42,11 @@ etcd:
       - ${addr}
     %{~ endfor ~}
     keyFile: /etc/etcd/kubernetes-key.pem
-imageRepository: k8s.gcr.io
+imageRepository: registry.k8s.io
 kind: ClusterConfiguration
-kubernetesVersion: v1.24.3
+kubernetesVersion: v1.25.0
 networking:
   dnsDomain: cluster.local
-  podSubnet: 10.244.0.0/16
+  podSubnet: 192.168.0.0/16
   serviceSubnet: 10.96.0.0/12
 scheduler: {}
