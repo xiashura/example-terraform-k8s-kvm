@@ -17,21 +17,28 @@
       '';
 
 
+      load-k8s-config = pkgs.writeShellScriptBin "load-k8s-config" ''
+        scp root@10.223.1.2:/etc/kubernetes/admin.conf .
+        sed -i "s|master-node-1|10.223.1.2|g" ./admin.conf
+      '';
+
     in with pkgs; {
       devShell = mkShell {
+        KUBECONFIG = "./admin.conf";
         buildInputs = [
           cloud-utils
           cloud-init-build-img
           packer
           cdrkit
           cfssl
+          jq
           openssl
           terraform
           terraform-providers.libvirt
-          
+          kubectl
+          kubernetes-helm-wrapped
+          load-k8s-config
         ];
-        # shellHook = ''
-        # '';
       };
     }
   );
