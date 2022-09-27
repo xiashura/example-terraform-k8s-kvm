@@ -23,5 +23,26 @@ you can deploy k8s HA on kvm
 ```
 terraform init && terraform apply
 ```
+and load certs admin 
+```
+load-k8s-config
+```
+check all nodes 
+```
+kubectl get nodes
+```
+
 # info
 <img src=./docs/example.png>
+
+# tools 
+
+```bash
+cloud-init-build-img
+```
+this command for create iso image for build packer 
+
+```bash
+load-k8s-config
+```
+copy admin certs in master node for kubectl 
