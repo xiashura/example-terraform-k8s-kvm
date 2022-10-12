@@ -1,6 +1,7 @@
 # example-terraform-k8s-kvm
 this simple infrastructure as code governed 
-by terraform setup cluster kubernetes HA on kvm
+by terraform setup cluster kubernetes HA on kvm 
+for cni network plugins example Calico or Flannel
 
 # run 
 
